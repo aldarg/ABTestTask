@@ -24,7 +24,7 @@ namespace ABTestTask.Controllers
         }
 
         [HttpPost]
-        public void PostUserActivities(UserActivityDto[] userActivityDtos)
+        public void Save(UserActivityDto[] userActivityDtos)
         {
             _userActivityLogic.SaveData(userActivityDtos);
         }
