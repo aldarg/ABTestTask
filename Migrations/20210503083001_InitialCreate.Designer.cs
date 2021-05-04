@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ABTestTask.Migrations
 {
-    [DbContext(typeof(RetentionDbContext))]
+    [DbContext(typeof(UserActivityDbContext))]
     [Migration("20210503083001_InitialCreate")]
     partial class InitialCreate
     {

@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ABTestTask.DataAccess
 {
-    public class RetentionDbContext : DbContext
+    public class UserActivityDbContext : DbContext
     {
-        public RetentionDbContext(DbContextOptions<RetentionDbContext> options) : base(options)
+        public UserActivityDbContext(DbContextOptions<UserActivityDbContext> options) : base(options)
         {
         }
         public DbSet<UserActivity> UserActivities { get; set; }

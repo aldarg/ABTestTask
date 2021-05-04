@@ -29,7 +29,8 @@ namespace ABTestTask
             {
                 configuration.RootPath = "ClientApp/build";
             });
-            services.AddDbContext<RetentionDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddRepository();
+            services.AddDbContext<UserActivityDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
         }
 
