@@ -1,5 +1,6 @@
 ﻿using ABTestTask.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace ABTestTask.DataAccess
 {
@@ -9,9 +10,17 @@ namespace ABTestTask.DataAccess
         {
         }
         public DbSet<UserActivity> UserActivities { get; set; }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.LogTo(Console.WriteLine);
+            optionsBuilder.EnableSensitiveDataLogging();
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserActivity>().ToTable("UserActivity");
+            modelBuilder.Entity<UserActivity>()
+                .Property(ua => ua.Lifetime)
+                .HasComputedColumnSql("DATEDIFF(DAY, [DateReg], [DateLastAct])", stored: true);
         }
     }
 }

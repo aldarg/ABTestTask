@@ -1,14 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap')
+
+*
+  margin: 0
+  box-sizing: border-box
+
+body
+  background: #F9F9F9
+
+input
+  height: 28px
+  margin: 5px
+  background: #FFFFFF
+  border-radius: 20px
+  border: none
+  font: 16px 'Ubuntu', sans-serif 
+  text-align: center
+  font-weight: 300
+  color: #5D6D97
+
+td
+  border-top: 0.5px solid rgba(93, 110, 151, 0.4)
+  font-weight: 300
+  color: #5D6D97
+  height: 40px
+
+th
+  color: #5D6D97
+  font-weight: bold
+  height: 40px
+
+button:hover
+  cursor: pointer
+
+.user-activity
+  margin: 40px
+
 .user-activity-form
+  width: 445px
+
+.input-group
   display: flex
 
+span
+  font: 16px 'Ubuntu', sans-serif
+  display: inline-block
+  margin: 5px
+  margin-bottom: 10px
+  color: #5D6E97
+  font-weight: normal
+
+.user-activity__header-user
+  width: 70px
+  text-align: center
+.user-activity__header-date
+  width: 160px
+  text-align: center
+
 .user-activity-form__user-input
-  width: 50px
-  height: 20px
-  background: #FFFFFF
-  border-radius: 5px
+  width: 70px
 
 .user-activity-form__date-input
-  width: 80px
-  height: 20px
-  background: #FFFFFF
-  border-radius: 5px
+  width: 160px
+
+.user-activity-form__new-button
+  border: none
+  background-color: #F9F9F9
+  font-size: 14px
+  height: 2.5em
+  width: 2.5em
+  border-radius: 999px
+  position: relative
+  left: 22px
+	
+  &:after,
+  &:before
+    content: ""
+    display: block
+    background-color: grey
+    position: absolute
+    top: 50%
+    left: 50%
+    transform: translate(-50%, -50%)
+	
+  &:before
+    height: 1em
+    width: 0.2em
+
+  &:after
+    height: 0.2em
+    width: 1em
+
+.user-activity-form__remove-button
+  border: none
+  background-color: #F9F9F9
+  font-size: 10px
+  height: 2.5em
+  width: 2.5em
+  border-radius: 999px
+  position: relative
+  left: 1em
+  top: 0.8em
+	
+  &:after,
+  &:before
+    content: ""
+    display: block
+    background-color: grey
+    position: absolute
+    top: 10%
+    left: 45%
+	
+  &:before
+    height: 1.5em
+    width: 0.2em
+    transform: rotate(45deg)
+
+  &:after
+    height: 1.5em
+    width: 0.2em
+    transform: rotate(135deg)
+
+.user-activity-form__save-button-content
+  text-align: center
+  margin-top: 15px
+
+.user-activity-form__save-button
+  width: 189px
+  height: 38px
+  background: #4A9DFF
+  border-radius: 10px
+  border: none
+
+.retention-data
+  width: 100%
+  background-color: #FFFFFF
+  box-shadow: 4px 0px 10px rgba(93, 109, 151, 0.1)
+  border-radius: 10px
+  border: none
+  font: 16px 'Ubuntu', sans-serif 
+  text-align: center
+  margin-top: 20px
+
+.retention-form
+  margin-left: 40px
+  width: 445px

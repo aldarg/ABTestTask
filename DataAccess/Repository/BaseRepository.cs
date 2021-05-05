@@ -6,12 +6,16 @@ namespace ABTestTask.DataAccess.Repository
 {
     public class BaseRepository<T> : IRepository<T> where T : class
     {
-        private readonly UserActivityDbContext _db;
-        private readonly DbSet<T> _dbSet;
+        protected UserActivityDbContext _db;
+        protected DbSet<T> _dbSet;
         public BaseRepository(UserActivityDbContext db)
         {
             this._db = db;
             this._dbSet = db.Set<T>();
+        }
+        public bool HaveData()
+        {
+            return _dbSet.Any();
         }
         public void Create(T entity)
         {

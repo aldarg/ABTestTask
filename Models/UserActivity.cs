@@ -8,5 +8,6 @@ namespace ABTestTask.Models
         public int UserId { get; set; }
         public DateTime DateReg { get; set; }
         public DateTime DateLastAct { get; set; }
+        public int Lifetime { get; private set; }
     }
 }

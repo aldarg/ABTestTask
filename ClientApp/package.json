@@ -18,6 +18,7 @@
     "@babel/preset-typescript": "^7.13.0",
     "@types/regenerator-runtime": "^0.13.0",
     "@types/webpack-env": "^1.16.0",
+    "@types/yup": "^0.29.11",
     "@typescript-eslint/eslint-plugin": "^4.20.0",
     "@typescript-eslint/parser": "^4.20.0",
     "babel-loader": "^8.2.2",
@@ -46,6 +47,7 @@
     "formik": "^2.2.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "recharts": "^2.0.9",
     "yup": "^0.32.9"
   }
 }

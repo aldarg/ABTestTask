@@ -18,9 +18,9 @@ namespace ABTestTask.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<UserActivityDto>> GetUserActivities()
+        public ActionResult<IEnumerable<RollingRetentionDataDto>> Calculate()
         {
-            return NoContent();
+            return _userActivityLogic.GetRollingRetention();
         }
 
         [HttpPost]
