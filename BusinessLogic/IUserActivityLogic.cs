@@ -7,5 +7,6 @@ namespace ABTestTask.BusinessLogic
     {
         void SaveData(UserActivityDto[] dtos);
         List<RollingRetentionDataDto> GetRollingRetention();
+        LifetimeDistributionDto GetLifetimeDistribution();
     }
 }

@@ -52,5 +52,18 @@ namespace ABTestTask.BusinessLogic
 
             return result;
         }
+        public LifetimeDistributionDto GetLifetimeDistribution()
+        {
+            var repo = _uow.UserActivities;
+            var data = repo.GetAll()
+                .GroupBy(record => record.Lifetime)
+                .OrderBy(g => g.Key)
+                .ToDictionary(g => g.Key, g => g.Count());
+
+            var sampleSize = repo.GetSize();
+            
+            var result = new LifetimeDistributionDto { SampleSize = sampleSize, Distribution = data };
+            return result;
+        }
     }
 }

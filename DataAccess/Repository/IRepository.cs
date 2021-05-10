@@ -14,5 +14,6 @@ namespace ABTestTask.DataAccess.Repository
         void Update(T entity);
         T GetById(int id);
         IEnumerable<T> GetAll();
+        int GetSize();
     }
 }

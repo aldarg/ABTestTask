@@ -40,6 +40,8 @@ button:hover
 
 .input-group
   display: flex
+.error-input
+  border: 1px solid red
 
 span
   font: 16px 'Ubuntu', sans-serif
@@ -48,6 +50,13 @@ span
   margin-bottom: 10px
   color: #5D6E97
   font-weight: normal
+
+p
+  color: #FF5151
+
+p::before
+  display: inline
+  content: "⚠ "
 
 .user-activity__header-user
   width: 70px
@@ -144,3 +153,19 @@ span
 .retention-form
   margin-left: 40px
   width: 445px
+
+.calculated-data
+  display: flex
+
+.calculated-data__lifetime_histogram
+  width: 500px
+  height: 300px
+  margin-left: 30px
+  margin-top: 60px
+  
+.user-activity-form__input-error
+  font: 12px 'Ubuntu', sans-serif 
+  color: #FF5151
+
+.input-group__errors
+  text-align: center

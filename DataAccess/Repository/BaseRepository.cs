@@ -45,5 +45,9 @@ namespace ABTestTask.DataAccess.Repository
         {
             _db.Entry(entity).State = EntityState.Modified;
         }
+        public int GetSize()
+        {
+            return _dbSet.Count();
+        }
     }
 }

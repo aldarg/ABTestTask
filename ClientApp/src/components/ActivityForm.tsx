@@ -1,12 +1,8 @@
 import { Field, FieldArray, Form, Formik, FormikErrors } from 'formik';
 import React from 'react';
+import { UserActivityRecord } from '../types';
 import * as yup from 'yup';
-
-type UserActivityRecord = {
-  userId: string;
-  dateRegistration: string;
-  dateLastActivity: string;
-};
+import classnames from 'classnames';
 
 const initial: UserActivityRecord[] = [
   {
@@ -27,8 +23,6 @@ const initial: UserActivityRecord[] = [
 ];
 
 const fetchData = async (data: UserActivityRecord[]) => {
-  console.log(data);
-  return;
   const url = 'api/useractivities/save';
   const response = await fetch(url, {
     method: 'POST',
@@ -59,7 +53,13 @@ const ActivityForm: React.FC = () => {
             .integer('Should be integer')
             .required('Required'),
           dateRegistration: yup.date().required('Required'),
-          dateLastActivity: yup.date().required('Required'),
+          dateLastActivity: yup
+            .date()
+            .required('Required')
+            .min(
+              yup.ref('dateRegistration'),
+              "Can't be earlier than date of registration",
+            ),
         }),
       )
       .required('Need at least one record!')
@@ -75,6 +75,7 @@ const ActivityForm: React.FC = () => {
     errors: FormikErrors<{ userRecords: UserActivityRecord[] }>,
     i: number,
   ) => {
+    console.log(errors);
     const error = errors.userRecords as UserActivityRecord[];
     return error[i];
   };
@@ -104,11 +105,18 @@ const ActivityForm: React.FC = () => {
                         <div key={index} className="input-group">
                           <div>
                             <Field
-                              className="user-activity-form__user-input"
+                              className={classnames(
+                                'user-activity-form__user-input',
+                                {
+                                  'error-input': isInvalidInput(errors, index),
+                                },
+                              )}
                               name={`userRecords[${index}].userId`}
                             />
                             {isInvalidInput(errors, index) && (
-                              <div>{getError(errors, index).userId}</div>
+                              <span className="user-activity-form__input-error">
+                                {getError(errors, index).userId}
+                              </span>
                             )}
                           </div>
                           <div>
@@ -117,9 +125,9 @@ const ActivityForm: React.FC = () => {
                               name={`userRecords[${index}].dateRegistration`}
                             />
                             {isInvalidInput(errors, index) && (
-                              <div>
+                              <span className="user-activity-form__input-error">
                                 {getError(errors, index).dateRegistration}
-                              </div>
+                              </span>
                             )}
                           </div>
                           <div>
@@ -128,9 +136,9 @@ const ActivityForm: React.FC = () => {
                               name={`userRecords[${index}].dateLastActivity`}
                             />
                             {isInvalidInput(errors, index) && (
-                              <div>
+                              <span className="user-activity-form__input-error">
                                 {getError(errors, index).dateLastActivity}
-                              </div>
+                              </span>
                             )}
                           </div>
                           <button

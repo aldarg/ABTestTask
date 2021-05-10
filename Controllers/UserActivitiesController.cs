@@ -28,5 +28,11 @@ namespace ABTestTask.Controllers
         {
             _userActivityLogic.SaveData(userActivityDtos);
         }
+        [HttpGet]
+        public ActionResult<LifetimeDistributionDto> GetLifetimeDistribution()
+        {
+            var result = _userActivityLogic.GetLifetimeDistribution();
+            return result;
+        }
     }
 }
