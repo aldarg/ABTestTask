@@ -7,6 +7,9 @@
 body
   background: #F9F9F9
 
+html, body, #root
+  height: 100%
+
 input
   height: 28px
   margin: 5px
@@ -33,23 +36,33 @@ button:hover
   cursor: pointer
 
 .user-activity
-  margin: 40px
+  margin-top: 40px
+  margin-left: 100px
+  width: 500px
+
+.user-activity__title
+  font: 20px 'Ubuntu', sans-serif
+  font-weight: 400
+  color: #3C5AA8
+  opacity: 40%
+  margin-left: 10px
+  margin-bottom: 40px
 
 .user-activity-form
   width: 445px
 
-.input-group
-  display: flex
-.error-input
-  border: 1px solid red
-
-span
+.user-activity__header-user, .user-activity__header-date
   font: 16px 'Ubuntu', sans-serif
   display: inline-block
   margin: 5px
   margin-bottom: 10px
   color: #5D6E97
   font-weight: normal
+
+.input-group
+  display: flex
+.error-input
+  border: 1px solid red
 
 p
   color: #FF5151
@@ -85,7 +98,7 @@ p::before
   &:before
     content: ""
     display: block
-    background-color: grey
+    background-color: #5D6D97
     position: absolute
     top: 50%
     left: 50%
@@ -114,7 +127,7 @@ p::before
   &:before
     content: ""
     display: block
-    background-color: grey
+    background-color: #5D6D97
     position: absolute
     top: 10%
     left: 45%
@@ -133,35 +146,63 @@ p::before
   text-align: center
   margin-top: 15px
 
+.calculations__button-content
+  text-align: center
+  margin-top: 15px
+  flex: 1
+  padding: 25px
+  display: flex
+  flex-direction: column
+  align-items: center
+
 .user-activity-form__save-button
   width: 189px
   height: 38px
   background: #4A9DFF
   border-radius: 10px
   border: none
+  font: 14px 'Ubuntu', sans-serif
+  color: #FFFFFF
 
-.retention-data
-  width: 100%
-  background-color: #FFFFFF
-  box-shadow: 4px 0px 10px rgba(93, 109, 151, 0.1)
+.calculations__calculate-button
+  width: 189px
+  height: 38px
+  background: #4A9DFF
   border-radius: 10px
   border: none
-  font: 16px 'Ubuntu', sans-serif 
-  text-align: center
-  margin-top: 20px
+  font: 14px 'Ubuntu', sans-serif
+  color: #FFFFFF
+  margin-top: 50px
 
 .retention-form
   margin-left: 40px
-  width: 445px
-
-.calculated-data
+  margin-bottom: 10px
+  background-color: #FFFFFF
+  height: 50px
+  width: 70%
+  border-radius: 5px
   display: flex
+  align-items: center
+  padding: 10px
+  justify-content: space-evenly
 
-.calculated-data__lifetime_histogram
-  width: 500px
-  height: 300px
+.retention-form__value
+  font: 14px 'Ubuntu', sans-serif
+  color: #5D6E97
+
+.calculations
+  flex: 1
+  padding-left: 40px
+
+.calculations__data
+  display: flex
+  flex-direction: column
+
+.calculations__data__lifetime-histogram
+  width: 600px
+  height: 400px
   margin-left: 30px
-  margin-top: 60px
+  margin-top: 20px
   
 .user-activity-form__input-error
   font: 12px 'Ubuntu', sans-serif 
@@ -169,3 +210,64 @@ p::before
 
 .input-group__errors
   text-align: center
+
+.nav
+  display: flex
+  align-items: center
+  height: 58px
+  margin-top: 10px
+  margin-left: 150px
+  background-color: #F9F9F9
+  box-shadow: 4px 0px 10px rgba(93, 109, 151, 0.1)
+
+.nav__title
+  font: 20px 'Ubuntu', sans-serif
+  font-weight: 700
+  color: #5D6E97
+  align-items: center
+
+.nav__search
+  position: relative
+
+.nav__search__input
+  margin-left: 40px
+  width: 320px
+  height: 28px
+  border-radius: 20px
+
+.nav__search__icon
+  position: absolute
+  top: 11px
+  left: 55px
+  pointer-events: none
+
+.nav__user-pic
+  margin-left: auto
+  margin-right: 20px
+
+.content
+  display: flex
+  height: 100%
+
+.left-menu
+  height: 100% !important
+  width: 215px
+  background-color: #FFFFFF
+  box-shadow: 4px 0px 10px rgba(93, 109, 151, 0.1)
+
+.left-menu__title
+  display: inline-block
+  margin-top: 18px
+  margin-left: 53px
+  font: 16px 'Ubuntu', sans-serif
+  font-weight: 300
+  color: #5D6D97
+
+.calculations__data__header
+  font: 20px 'Ubuntu', sans-serif
+  font-weight: 400
+  color: #3C5AA8
+  opacity: 40%
+  padding: 40px
+
+.retention-form__value

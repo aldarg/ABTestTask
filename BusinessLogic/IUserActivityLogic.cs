@@ -5,8 +5,8 @@ namespace ABTestTask.BusinessLogic
 {
     public interface IUserActivityLogic
     {
+        List<UserActivityDto> GetData();
         void SaveData(UserActivityDto[] dtos);
-        List<RollingRetentionDataDto> GetRollingRetention();
-        LifetimeDistributionDto GetLifetimeDistribution();
+        CalculatedDataDto GetCalculatedData();
     }
 }

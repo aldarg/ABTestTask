@@ -13,7 +13,7 @@ namespace ABTestTask.DataAccess.Repository
             this._db = db;
             this._dbSet = db.Set<T>();
         }
-        public bool HaveData()
+        public bool HasData()
         {
             return _dbSet.Any();
         }

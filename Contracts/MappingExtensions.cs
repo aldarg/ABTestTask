@@ -10,8 +10,8 @@ namespace ABTestTask.Contracts
             return new UserActivityDto
             {
                 UserId = userActivity.UserId,
-                DateRegistration = userActivity.DateReg.ToString("dd.mm.yyyy"),
-                DateLastActivity = userActivity.DateLastAct.ToString("dd.mm.yyyy"),
+                DateRegistration = userActivity.DateReg.ToString("dd.MM.yyyy"),
+                DateLastActivity = userActivity.DateLastAct.ToString("dd.MM.yyyy"),
             };
         }
 

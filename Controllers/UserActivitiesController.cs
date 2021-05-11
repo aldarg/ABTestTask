@@ -16,23 +16,21 @@ namespace ABTestTask.Controllers
         {
             _userActivityLogic = userActivityLogic;
         }
+        public ActionResult<IEnumerable<UserActivityDto>> GetRecords()
+        {
+            return _userActivityLogic.GetData();
+        }
 
         [HttpGet]
-        public ActionResult<IEnumerable<RollingRetentionDataDto>> Calculate()
+        public ActionResult<CalculatedDataDto> Calculate()
         {
-            return _userActivityLogic.GetRollingRetention();
+            return _userActivityLogic.GetCalculatedData();
         }
 
         [HttpPost]
         public void Save(UserActivityDto[] userActivityDtos)
         {
             _userActivityLogic.SaveData(userActivityDtos);
-        }
-        [HttpGet]
-        public ActionResult<LifetimeDistributionDto> GetLifetimeDistribution()
-        {
-            var result = _userActivityLogic.GetLifetimeDistribution();
-            return result;
         }
     }
 }

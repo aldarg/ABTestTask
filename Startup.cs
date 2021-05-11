@@ -30,7 +30,7 @@ namespace ABTestTask
                 configuration.RootPath = "ClientApp/build";
             });
             services.AddRepository();
-            services.AddDbContext<UserActivityDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<UserActivityDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
         }
 

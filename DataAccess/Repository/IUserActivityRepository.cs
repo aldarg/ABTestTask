@@ -10,5 +10,6 @@ namespace ABTestTask.DataAccess.Repository
         Dictionary<DateTime, int[]> GetUsersByRegistrationDate();
         HashSet<int> GetUsersRegisteredBeforeDate(DateTime date);
         UserActivity[] GetUserActivitiesByIds(HashSet<int> ids);
+        UserActivity[] GetUsersWithLifetimeMoreThan(int days);
     }
 }

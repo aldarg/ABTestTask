@@ -7,13 +7,15 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { LifetimeDistributionDto } from '../types';
 
 type LifetimeDistributionProps = {
-  data: LifetimeDistributionDto;
+  sampleSize: number;
+  distribution: {
+    [lifetime: number]: number;
+  };
 };
 
-const getDataForChart = (data: LifetimeDistributionDto) => {
+const getDataForChart = (data: LifetimeDistributionProps) => {
   const periodCount = 1 + Math.floor(Math.log2(data.sampleSize));
   const lifetimeSample = Object.keys(data.distribution);
   const maxLifetime = Number(lifetimeSample[lifetimeSample.length - 1]);
@@ -37,38 +39,45 @@ const getDataForChart = (data: LifetimeDistributionDto) => {
 };
 
 const LifetimeDistribution: React.FC<LifetimeDistributionProps> = ({
-  data,
+  sampleSize,
+  distribution,
 }: LifetimeDistributionProps) => {
-  const dataForChart = getDataForChart(data);
-  console.log(dataForChart);
+  const dataForChart = getDataForChart({ sampleSize, distribution });
 
   return (
-    <div className="calculated-data__lifetime_histogram">
-      <ResponsiveContainer>
-        <BarChart
-          data={dataForChart}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 20,
-          }}
-        >
-          <XAxis
-            dataKey="name"
-            label={{
-              value: 'Lifetime, days',
-              position: 'bottom',
+    <>
+      <span className="calculations__data__header">LIFETIME DISTRIBUTION</span>
+      <div className="calculations__data__lifetime-histogram">
+        <ResponsiveContainer>
+          <BarChart
+            data={dataForChart}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 20,
             }}
-          />
-          <YAxis
-            label={{ value: 'Users count', angle: -90, position: 'insideLeft' }}
-          />
-          <Tooltip />
-          <Bar dataKey="Users count" fill="#82ca9d" />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
+          >
+            <XAxis
+              dataKey="name"
+              label={{
+                value: 'Lifetime, days',
+                position: 'bottom',
+              }}
+            />
+            <YAxis
+              label={{
+                value: 'Users count',
+                angle: -90,
+                position: 'insideLeft',
+              }}
+            />
+            <Tooltip />
+            <Bar dataKey="Users count" fill="#82ca9d" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </>
   );
 };
 

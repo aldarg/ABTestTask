@@ -14,6 +14,13 @@ namespace ABTestTask.BusinessLogic
         {
             _uow = uow;
         }
+        public List<UserActivityDto> GetData()
+        {
+            var repo = _uow.UserActivities;
+            var userActivities = repo.GetAll();
+
+            return userActivities.OrderBy(a => a.DateReg).Select(a => a.ToUserActivityDto()).ToList();
+        }
         public void SaveData(UserActivityDto[] dtos)
         {
             var repo = _uow.UserActivities;
@@ -24,46 +31,30 @@ namespace ABTestTask.BusinessLogic
 
             _uow.Save();
         }
-        public List<RollingRetentionDataDto> GetRollingRetention()
+        public CalculatedDataDto GetCalculatedData()
         {
             const int RollingRetentionDays = 7;
 
             var repo = _uow.UserActivities;
-            if (!repo.HaveData())
+            var registrationsTotalCount = repo.GetSize();
+
+            if (registrationsTotalCount == 0)
             {
-                return new List<RollingRetentionDataDto>();
+                return new CalculatedDataDto { SampleSize = 0 };
             }
 
-            var registrationsByDate = repo.GetUsersByRegistrationDate();
-            var dates = registrationsByDate.Keys;
-
-            var result = new List<RollingRetentionDataDto>();
-            foreach (var date in dates)
-            {
-                var registeredUsers = repo.GetUsersRegisteredBeforeDate(date);
-                var registeredUsersCount = registeredUsers.Count;
-                var activeUserCount = repo.GetUserActivitiesByIds(registeredUsers)
-                    .Where(u => u.DateLastAct >= date.AddDays(RollingRetentionDays))
-                    .Count();
-                var rollingRetention = (double)activeUserCount / registeredUsersCount;
-
-                result.Add(new RollingRetentionDataDto { Day = date.Date, RollingRetention = rollingRetention });
-            }
-
-            return result;
-        }
-        public LifetimeDistributionDto GetLifetimeDistribution()
-        {
-            var repo = _uow.UserActivities;
-            var data = repo.GetAll()
+            var usersWithLastActivityAfterNDaysCount = repo.GetUsersWithLifetimeMoreThan(RollingRetentionDays).Length;
+            var lifetimeDistribution = repo.GetAll()
                 .GroupBy(record => record.Lifetime)
                 .OrderBy(g => g.Key)
                 .ToDictionary(g => g.Key, g => g.Count());
 
-            var sampleSize = repo.GetSize();
-            
-            var result = new LifetimeDistributionDto { SampleSize = sampleSize, Distribution = data };
-            return result;
+            return new CalculatedDataDto
+            {
+                RollingRetention = (double)usersWithLastActivityAfterNDaysCount / registrationsTotalCount,
+                SampleSize = registrationsTotalCount,
+                Distribution = lifetimeDistribution,
+            };
         }
     }
 }

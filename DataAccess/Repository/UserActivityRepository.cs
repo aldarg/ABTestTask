@@ -44,5 +44,11 @@ namespace ABTestTask.DataAccess.Repository
                 .Where(a => ids.Contains(a.UserId))
                 .ToArray();
         }
+        public UserActivity[] GetUsersWithLifetimeMoreThan(int days)
+        {
+            return _dbSet
+                .Where(a => a.Lifetime >= days)
+                .ToArray();
+        }
     }
 }

@@ -2,8 +2,9 @@
 
 namespace ABTestTask.Contracts
 {
-    public class LifetimeDistributionDto
+    public class CalculatedDataDto
     {
+        public double RollingRetention { get; set; }
         public int SampleSize { get; set; }
         public Dictionary<int, int> Distribution { get; set; }
     }

@@ -20,7 +20,7 @@ namespace ABTestTask.DataAccess
             modelBuilder.Entity<UserActivity>().ToTable("UserActivity");
             modelBuilder.Entity<UserActivity>()
                 .Property(ua => ua.Lifetime)
-                .HasComputedColumnSql("DATEDIFF(DAY, [DateReg], [DateLastAct])", stored: true);
+                .HasComputedColumnSql("DATE_PART('day', AGE(date_last_activity, date_registration))", stored: true);
         }
     }
 }
