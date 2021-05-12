@@ -1,59 +1,59 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { UserActivityRecord } from '../types/app';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { DateTime } from 'luxon';
+import classnames from 'classnames';
 
-const sendData = async ({ records }: { records: UserActivityRecord[] }) => {
-  const url = 'api/useractivities/save';
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(records),
-  });
+const mapToDto = (records: UserActivityRecord[]) => {
+  return records.map(({ userId, dateRegistration, dateLastActivity }) => ({
+    userId,
+    dateRegistration: DateTime.fromFormat(
+      dateRegistration as string,
+      'dd.MM.yyyy',
+    ),
+    dateLastActivity: DateTime.fromFormat(
+      dateLastActivity as string,
+      'dd.MM.yyyy',
+    ),
+  }));
+};
 
-  if (response.ok) {
-    console.log('saved');
-  } else {
-    //TODO error
-    console.log('not saved');
-  }
+const mapFromDto = (dtos: UserActivityRecord[]) => {
+  return dtos.map(({ userId, dateRegistration, dateLastActivity }) => ({
+    userId,
+    dateRegistration: DateTime.fromISO(dateRegistration as string).toFormat(
+      'dd.MM.yyyy',
+    ),
+    dateLastActivity: DateTime.fromISO(dateLastActivity as string).toFormat(
+      'dd.MM.yyyy',
+    ),
+  }));
 };
 
 type FormValues = {
   records: UserActivityRecord[];
 };
 
-// const exactFormatOfDateCheck = {
-//   name: 'dateFormatCheck',
-//   exclusive: false,
-//   message: 'Format of date should be DD.MM.YYYY',
-//   test: (value: Date | undefined) =>
-//     value || (value as string).search(/\d{2}\.\d{2}\.\d{4}/gm) >= 0,
-// };
-
 const UserActivityInput: React.FC = () => {
+  const [isSaveError, setSaveError] = useState(false);
+
   const validationSchema = yup.object().shape({
     records: yup.array().of(
       yup.object().shape({
-        user: yup
+        userId: yup
           .number()
           .typeError('User ID should be a number')
-          .positive("Can't be negative")
-          .integer('Should be an integer')
+          .positive("User ID can't be negative")
+          .integer('User ID should be an integer')
           .required('User ID is required'),
         dateRegistration: yup
           .string()
-          .typeError('Registration date - not a date')
           .required('Registration date is required')
-          .matches(/\d{2}\.\d{2}\.\d{4}/gm, 'Registration date - not a date')
           .test(
-            'dateParse',
-            'Registration date - not a date',
+            'dateFormat',
+            'Registration date - invalid format. Should be [dd.mm.yyyy]',
             (value: string) => {
               const date = DateTime.fromFormat(value, 'dd.MM.yyyy');
               return date.isValid;
@@ -61,12 +61,10 @@ const UserActivityInput: React.FC = () => {
           ),
         dateLastActivity: yup
           .string()
-          .typeError('Last activity date - not a date')
           .required('Last activity date is required')
-          .matches(/\d{2}\.\d{2}\.\d{4}/gm, 'Registration date - not a date')
           .test(
-            'dateParse',
-            'Registration date - not a date',
+            'dateFormat',
+            'Last activity date - invalid format. Should be [dd.mm.yyyy]',
             (value: string) => {
               const date = DateTime.fromFormat(value, 'dd.MM.yyyy');
               return date.isValid;
@@ -82,6 +80,8 @@ const UserActivityInput: React.FC = () => {
     control,
     formState: { errors },
     setValue,
+    getValues,
+    trigger,
   } = useForm<FormValues>({
     defaultValues: {
       records: [
@@ -113,16 +113,46 @@ const UserActivityInput: React.FC = () => {
 
       if (response.ok) {
         const records = (await response.json()) as UserActivityRecord[];
-        setValue('records', records);
+        setValue('records', mapFromDto(records));
       }
     };
 
     getData();
   }, [setValue]);
 
+  const sendData = async ({ records }: { records: UserActivityRecord[] }) => {
+    setSaveError(false);
+    const url = 'api/useractivities/save';
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(mapToDto(records)),
+      });
+
+      if (response.ok) {
+        console.log('saved');
+      } else {
+        if (response.status === 400) {
+          trigger();
+        }
+      }
+    } catch {
+      setSaveError(true);
+    }
+  };
+
+  const isNoData = !getValues().records?.[0].userId;
+
   return (
     <div className="user-activity">
       <h1 className="user-activity__title">USER ACTIVITY</h1>
+      {isSaveError && (
+        <div>Something went completly wrong - data is not saved.</div>
+      )}
       <div className="user-activity__headers">
         <span className="user-activity__header-user">User ID</span>
         <span className="user-activity__header-date">Registration date</span>
@@ -131,20 +161,27 @@ const UserActivityInput: React.FC = () => {
       <div className="user-activity-form">
         <form onSubmit={handleSubmit(sendData)}>
           {fields.map((field, index) => {
+            console.log(errors?.records?.[index]?.userId);
             return (
               <div key={field.id}>
                 <div className="input-group">
                   <input
                     {...register(`records.${index}.userId` as const)}
-                    className="user-activity-form__user-input"
+                    className={classnames('user-activity-form__user-input', {
+                      invalid: !!errors?.records?.[index]?.userId,
+                    })}
                   />
                   <input
                     {...register(`records.${index}.dateRegistration` as const)}
-                    className="user-activity-form__date-input"
+                    className={classnames('user-activity-form__date-input', {
+                      invalid: !!errors?.records?.[index]?.dateRegistration,
+                    })}
                   />
                   <input
                     {...register(`records.${index}.dateLastActivity` as const)}
-                    className="user-activity-form__date-input"
+                    className={classnames('user-activity-form__date-input', {
+                      invalid: !!errors?.records?.[index]?.dateLastActivity,
+                    })}
                   />
                   <button
                     type="button"
@@ -178,7 +215,11 @@ const UserActivityInput: React.FC = () => {
             }
           ></button>
           <div className="user-activity-form__save-button-content">
-            <button type="submit" className="user-activity-form__save-button">
+            <button
+              type="submit"
+              disabled={!!isNoData}
+              className="user-activity-form__save-button"
+            >
               SAVE
             </button>
           </div>

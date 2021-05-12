@@ -27,7 +27,7 @@ namespace ABTestTask
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "ClientApp/build";
+                configuration.RootPath = "ClientApp/dist";
             });
             services.AddRepository();
             services.AddDbContext<UserActivityDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));

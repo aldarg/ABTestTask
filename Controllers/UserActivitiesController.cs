@@ -1,6 +1,5 @@
 ﻿using ABTestTask.BusinessLogic;
 using ABTestTask.Contracts;
-using ABTestTask.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
@@ -30,6 +29,10 @@ namespace ABTestTask.Controllers
         [HttpPost]
         public void Save(UserActivityDto[] userActivityDtos)
         {
+            if (ModelState.IsValid)
+            {
+
+            }
             _userActivityLogic.SaveData(userActivityDtos);
         }
     }

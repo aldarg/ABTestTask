@@ -1,7 +1,7 @@
 type UserActivityRecord = {
   userId: number;
-  dateRegistration: string;
-  dateLastActivity: string;
+  dateRegistration: string | Date;
+  dateLastActivity: string | Date;
 };
 
 export { UserActivityRecord };

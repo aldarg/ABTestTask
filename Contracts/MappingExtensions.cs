@@ -10,8 +10,8 @@ namespace ABTestTask.Contracts
             return new UserActivityDto
             {
                 UserId = userActivity.UserId,
-                DateRegistration = userActivity.DateReg.ToString("dd.MM.yyyy"),
-                DateLastActivity = userActivity.DateLastAct.ToString("dd.MM.yyyy"),
+                DateRegistration = userActivity.DateReg,
+                DateLastActivity = userActivity.DateLastAct,
             };
         }
 
@@ -20,8 +20,8 @@ namespace ABTestTask.Contracts
             return new UserActivity
             {
                 UserId = dto.UserId,
-                DateReg = DateTime.Parse(dto.DateRegistration),
-                DateLastAct = DateTime.Parse(dto.DateLastActivity),
+                DateReg = dto.DateRegistration,
+                DateLastAct = dto.DateLastActivity,
             };
         }
     }
