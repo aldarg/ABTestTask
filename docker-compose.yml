@@ -1,0 +1,38 @@
+version: '3.9'
+
+networks:
+  dockerapi-dev:
+    driver: bridge
+
+services:
+  postgres_image:
+    image: postgres:latest
+    ports:
+      - "5432"
+    restart: always
+    volumes:
+       - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: "123"
+      POSTGRES_DB: "useractivity_db"
+    networks:
+      - dockerapi-dev
+
+  abtestserver:
+    image: abtesttask:latest
+    depends_on:
+      - "postgres_image"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    environment:
+      - DB_CONNECTION_STRING="Host=0.0.0.0;Database=useractivity_db;Username=postgres;Password=123"
+      - ASPNETCORE_URLS=https://+:5001;http://+:5000;
+    networks:
+      - dockerapi-dev
+      
+volumes:
+  pgdata:

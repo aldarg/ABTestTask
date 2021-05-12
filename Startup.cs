@@ -30,7 +30,7 @@ namespace ABTestTask
                 configuration.RootPath = "ClientApp/dist";
             });
             services.AddRepository();
-            services.AddDbContext<UserActivityDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<UserActivityDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DockerConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
         }
 
