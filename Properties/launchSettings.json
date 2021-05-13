@@ -20,7 +20,7 @@
       "dotnetRunMessages": "true",
       "launchBrowser": true,
       "launchUrl": "api/UserActivities/Calculate",
-      "applicationUrl": "http://localhost:8000;",
+      "applicationUrl": "http://localhost:5000;https://localhost:5001;",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

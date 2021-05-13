@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { UserActivityRecord } from '../types/app';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -20,24 +20,25 @@ const mapToDto = (records: UserActivityRecord[]) => {
   }));
 };
 
-const mapFromDto = (dtos: UserActivityRecord[]) => {
-  return dtos.map(({ userId, dateRegistration, dateLastActivity }) => ({
-    userId,
-    dateRegistration: DateTime.fromISO(dateRegistration as string).toFormat(
-      'dd.MM.yyyy',
-    ),
-    dateLastActivity: DateTime.fromISO(dateLastActivity as string).toFormat(
-      'dd.MM.yyyy',
-    ),
-  }));
-};
+// const mapFromDto = (dtos: UserActivityRecord[]) => {
+//   return dtos.map(({ userId, dateRegistration, dateLastActivity }) => ({
+//     userId,
+//     dateRegistration: DateTime.fromISO(dateRegistration as string).toFormat(
+//       'dd.MM.yyyy',
+//     ),
+//     dateLastActivity: DateTime.fromISO(dateLastActivity as string).toFormat(
+//       'dd.MM.yyyy',
+//     ),
+//   }));
+// };
 
 type FormValues = {
   records: UserActivityRecord[];
 };
 
 const UserActivityInput: React.FC = () => {
-  const [isSaveError, setSaveError] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
   const validationSchema = yup.object().shape({
     records: yup.array().of(
@@ -79,8 +80,6 @@ const UserActivityInput: React.FC = () => {
     handleSubmit,
     control,
     formState: { errors },
-    setValue,
-    getValues,
     trigger,
   } = useForm<FormValues>({
     defaultValues: {
@@ -100,59 +99,57 @@ const UserActivityInput: React.FC = () => {
     name: 'records',
   });
 
-  useEffect(() => {
-    const getData = async () => {
-      const url = 'api/useractivities/getrecords';
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      });
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     const url = 'api/useractivities/getrecords';
+  //     const response = await fetch(url, {
+  //       method: 'GET',
+  //       headers: {
+  //         Accept: 'application/json',
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
 
-      if (response.ok) {
-        const records = (await response.json()) as UserActivityRecord[];
-        setValue('records', mapFromDto(records));
-      }
-    };
+  //     if (response.ok) {
+  //       const records = (await response.json()) as UserActivityRecord[];
+  //       if (records.length > 0) {
+  //         setValue('records', mapFromDto(records));
+  //       }
+  //     }
+  //   };
 
-    getData();
-  }, [setValue]);
+  //   getData();
+  // }, [setValue]);
 
   const sendData = async ({ records }: { records: UserActivityRecord[] }) => {
-    setSaveError(false);
+    setIsError(false);
     const url = 'api/useractivities/save';
     try {
       const response = await fetch(url, {
         method: 'POST',
         headers: {
-          Accept: 'application/json',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(mapToDto(records)),
       });
 
       if (response.ok) {
-        console.log('saved');
+        setIsSaved(true);
+        setTimeout(() => setIsSaved(false), 3000);
       } else {
         if (response.status === 400) {
           trigger();
         }
+        setIsError(true);
       }
     } catch {
-      setSaveError(true);
+      setIsError(true);
     }
   };
-
-  const isNoData = !getValues().records?.[0].userId;
 
   return (
     <div className="user-activity">
       <h1 className="user-activity__title">USER ACTIVITY</h1>
-      {isSaveError && (
-        <div>Something went completly wrong - data is not saved.</div>
-      )}
       <div className="user-activity__headers">
         <span className="user-activity__header-user">User ID</span>
         <span className="user-activity__header-date">Registration date</span>
@@ -161,7 +158,6 @@ const UserActivityInput: React.FC = () => {
       <div className="user-activity-form">
         <form onSubmit={handleSubmit(sendData)}>
           {fields.map((field, index) => {
-            console.log(errors?.records?.[index]?.userId);
             return (
               <div key={field.id}>
                 <div className="input-group">
@@ -191,13 +187,19 @@ const UserActivityInput: React.FC = () => {
                 </div>
                 <div className="input-group__errors">
                   {errors?.records?.[index]?.userId && (
-                    <p>{errors?.records?.[index]?.userId?.message}</p>
+                    <p className="error">
+                      {errors?.records?.[index]?.userId?.message}
+                    </p>
                   )}
                   {errors?.records?.[index]?.dateRegistration && (
-                    <p>{errors?.records?.[index]?.dateRegistration?.message}</p>
+                    <p className="error">
+                      {errors?.records?.[index]?.dateRegistration?.message}
+                    </p>
                   )}
                   {errors?.records?.[index]?.dateLastActivity && (
-                    <p>{errors?.records?.[index]?.dateLastActivity?.message}</p>
+                    <p className="error">
+                      {errors?.records?.[index]?.dateLastActivity?.message}
+                    </p>
                   )}
                 </div>
               </div>
@@ -214,15 +216,27 @@ const UserActivityInput: React.FC = () => {
               })
             }
           ></button>
+          {isError && (
+            <div className="input-group__errors">
+              <p className="error">
+                Something went completly wrong - data is not saved.
+              </p>
+            </div>
+          )}
           <div className="user-activity-form__save-button-content">
             <button
               type="submit"
-              disabled={!!isNoData}
+              id="save-button"
               className="user-activity-form__save-button"
             >
               SAVE
             </button>
           </div>
+          {isSaved && (
+            <div className="input-group__success">
+              <p className="success">Data is saved</p>
+            </div>
+          )}
         </form>
       </div>
     </div>

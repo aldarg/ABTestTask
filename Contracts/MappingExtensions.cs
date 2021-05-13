@@ -1,5 +1,4 @@
 ﻿using ABTestTask.Models;
-using System;
 
 namespace ABTestTask.Contracts
 {

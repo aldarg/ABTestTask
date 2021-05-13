@@ -5,4 +5,4 @@ RUN dotnet restore
 COPY . .
 RUN dotnet publish -c Release -o out
 WORKDIR /app/out
-ENTRYPOINT ["dotnet", "ABTestTask.dll"]
+CMD ASPNETCORE_URLS="https://*:8000" dotnet ABTestTask.dll

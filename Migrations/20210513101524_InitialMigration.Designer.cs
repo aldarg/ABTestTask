@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ABTestTask.Migrations
 {
     [DbContext(typeof(UserActivityDbContext))]
-    [Migration("20210512134722_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20210513101524_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,7 +41,7 @@ namespace ABTestTask.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("integer")
                         .HasColumnName("lifetime")
-                        .HasComputedColumnSql("DATE_PART('day', AGE(date_last_activity, date_registration))", true);
+                        .HasComputedColumnSql("DATE_PART('day', date_last_activity - date_registration)", true);
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer")

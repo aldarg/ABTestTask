@@ -39,7 +39,7 @@ namespace ABTestTask.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("integer")
                         .HasColumnName("lifetime")
-                        .HasComputedColumnSql("DATE_PART('day', AGE(date_last_activity, date_registration))", true);
+                        .HasComputedColumnSql("DATE_PART('day', date_last_activity - date_registration)", true);
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer")

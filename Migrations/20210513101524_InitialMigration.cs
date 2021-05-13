@@ -1,10 +1,10 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using System;
 
 namespace ABTestTask.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,7 +17,7 @@ namespace ABTestTask.Migrations
                     user_id = table.Column<int>(type: "integer", nullable: false),
                     date_registration = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     date_last_activity = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    lifetime = table.Column<int>(type: "integer", nullable: false, computedColumnSql: "DATE_PART('day', AGE(date_last_activity, date_registration))", stored: true)
+                    lifetime = table.Column<int>(type: "integer", nullable: false, computedColumnSql: "DATE_PART('day', date_last_activity - date_registration)", stored: true)
                 },
                 constraints: table =>
                 {

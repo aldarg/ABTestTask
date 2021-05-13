@@ -45,7 +45,7 @@ const App: React.FC = () => {
             </button>
           </div>
           <div className="calculations__data">
-            {data.rollingRetention && (
+            {data.rollingRetention !== undefined && (
               <RollingRetentionMetric value={data.rollingRetention} />
             )}
             {data.sampleSize && data.sampleSize > 0 && (

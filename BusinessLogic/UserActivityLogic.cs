@@ -1,6 +1,5 @@
 ﻿using ABTestTask.Contracts;
 using ABTestTask.DataAccess.UOW;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,6 +23,11 @@ namespace ABTestTask.BusinessLogic
         public void SaveData(UserActivityDto[] dtos)
         {
             var repo = _uow.UserActivities;
+            var oldRecords = repo.GetAll();
+            foreach (var record in oldRecords)
+            {
+                repo.Delete(record.ID);
+            }
             foreach (UserActivityDto dto in dtos)
             {
                 repo.Create(dto.FromUserActivityDto());

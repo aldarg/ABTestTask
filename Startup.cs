@@ -1,10 +1,10 @@
+using ABTestTask.DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
-using ABTestTask.DataAccess;
 
 
 namespace ABTestTask
@@ -30,7 +30,7 @@ namespace ABTestTask
                 configuration.RootPath = "ClientApp/dist";
             });
             services.AddRepository();
-            services.AddDbContext<UserActivityDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DockerConnection")));
+            services.AddDbContext<UserActivityDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
         }
 

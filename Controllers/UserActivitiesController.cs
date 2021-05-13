@@ -29,10 +29,6 @@ namespace ABTestTask.Controllers
         [HttpPost]
         public void Save(UserActivityDto[] userActivityDtos)
         {
-            if (ModelState.IsValid)
-            {
-
-            }
             _userActivityLogic.SaveData(userActivityDtos);
         }
     }

@@ -7,14 +7,15 @@ type RollingRetentionMetricProps = {
 const RollingRetentionMetric: React.FC<RollingRetentionMetricProps> = ({
   value,
 }: RollingRetentionMetricProps) => {
+  const retention = (value * 100).toFixed(2);
   return (
     <>
       <span className="calculations__data__header">ROLLING RETENTION</span>
       <div className="retention-form">
         <span className="retention-form__value">
-          Current rolling retention 7 days
+          Current rolling retention 7 days:
         </span>
-        <span className="retention-form__value">{value * 100}%</span>
+        <span className="retention-form__value">{retention}%</span>
       </div>
     </>
   );

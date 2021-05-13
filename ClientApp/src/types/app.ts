@@ -1,5 +1,5 @@
 type UserActivityRecord = {
-  userId: number;
+  userId: number | undefined;
   dateRegistration: string | Date;
   dateLastActivity: string | Date;
 };
