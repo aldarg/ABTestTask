@@ -1,7 +1,5 @@
 ﻿using ABTestTask.Models;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace ABTestTask.DataAccess.Repository
@@ -11,43 +9,16 @@ namespace ABTestTask.DataAccess.Repository
         public UserActivityRepository(UserActivityDbContext db) : base(db)
         {
         }
-
-        public Dictionary<DateTime, int[]> GetUsersByLastActivityDate()
+        public UserActivity[] GetUserActivityRecords(int lifetime)
         {
             return _dbSet
-                .AsNoTracking()
-                .AsEnumerable()
-                .GroupBy(a => a.DateLastAct)
-                .OrderBy(a => a.Key)
-                .ToDictionary(g => g.Key, g => g.Select(r => r.UserId).ToArray());
-        }
-
-        public Dictionary<DateTime, int[]> GetUsersByRegistrationDate()
-        {
-            return _dbSet
-                .AsNoTracking()
-                .AsEnumerable()
-                .GroupBy(a => a.DateReg)
-                .OrderBy(a => a.Key)
-                .ToDictionary(g => g.Key, g => g.Select(r => r.UserId).ToArray());
-        }
-        public HashSet<int> GetUsersRegisteredBeforeDate(DateTime date)
-        {
-            return _dbSet
-                .Where(a => a.DateReg <= date)
-                .Select(a => a.UserId)
-                .ToHashSet();
-        }
-        public UserActivity[] GetUserActivitiesByIds(HashSet<int> ids)
-        {
-            return _dbSet
-                .Where(a => ids.Contains(a.UserId))
+                .Where(a => a.Lifetime >= lifetime)
                 .ToArray();
         }
-        public UserActivity[] GetUsersWithLifetimeMoreThan(int days)
+        public UserActivity[] GetUserActivityRecords(DateTime registrationDate)
         {
             return _dbSet
-                .Where(a => a.Lifetime >= days)
+                .Where(a => a.DateReg <= registrationDate)
                 .ToArray();
         }
     }

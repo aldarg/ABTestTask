@@ -1,5 +1,6 @@
 ﻿using ABTestTask.Contracts;
 using ABTestTask.DataAccess.UOW;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -37,17 +38,20 @@ namespace ABTestTask.BusinessLogic
         }
         public CalculatedDataDto GetCalculatedData()
         {
-            const int RollingRetentionDays = 7;
+            const int RollingRetentionDay = 7;
 
             var repo = _uow.UserActivities;
-            var registrationsTotalCount = repo.GetSize();
+            var sampleSize = repo.GetSize();
 
-            if (registrationsTotalCount == 0)
+            if (sampleSize == 0)
             {
                 return new CalculatedDataDto { SampleSize = 0 };
             }
 
-            var usersWithLastActivityAfterNDaysCount = repo.GetUsersWithLifetimeMoreThan(RollingRetentionDays).Length;
+            var maxRegistrationDate = DateTime.Now.AddDays(-1 * RollingRetentionDay);
+            var registrationsBeforeNDaysCount = repo.GetUserActivityRecords(maxRegistrationDate).Length;
+            var usersWithLastActivityAfterNDaysCount = repo.GetUserActivityRecords(RollingRetentionDay).Length;
+
             var lifetimeDistribution = repo.GetAll()
                 .GroupBy(record => record.Lifetime)
                 .OrderBy(g => g.Key)
@@ -55,8 +59,8 @@ namespace ABTestTask.BusinessLogic
 
             return new CalculatedDataDto
             {
-                RollingRetention = (double)usersWithLastActivityAfterNDaysCount / registrationsTotalCount,
-                SampleSize = registrationsTotalCount,
+                RollingRetention = (double)usersWithLastActivityAfterNDaysCount / registrationsBeforeNDaysCount,
+                SampleSize = sampleSize,
                 Distribution = lifetimeDistribution,
             };
         }

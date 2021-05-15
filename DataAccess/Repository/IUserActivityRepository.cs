@@ -6,10 +6,7 @@ namespace ABTestTask.DataAccess.Repository
 {
     public interface IUserActivityRepository : IRepository<UserActivity>
     {
-        Dictionary<DateTime, int[]> GetUsersByLastActivityDate();
-        Dictionary<DateTime, int[]> GetUsersByRegistrationDate();
-        HashSet<int> GetUsersRegisteredBeforeDate(DateTime date);
-        UserActivity[] GetUserActivitiesByIds(HashSet<int> ids);
-        UserActivity[] GetUsersWithLifetimeMoreThan(int days);
+        UserActivity[] GetUserActivityRecords(int lifetime);
+        UserActivity[] GetUserActivityRecords(DateTime registrationDate);
     }
 }
